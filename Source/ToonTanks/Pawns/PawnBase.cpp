@@ -3,6 +3,7 @@
 
 #include "PawnBase.h"
 #include "Components/CapsuleComponent.h"
+#include "ToonTanks/Actors/ProjectileBase.h"
 
 APawnBase::APawnBase()
 {
@@ -44,7 +45,14 @@ void APawnBase::RotateTurret(FVector LookAtTarget)
 void APawnBase::Fire()
 {
 	// Get ProjectileSpawnPoint Location && Rotation -> Spawn Projectile at Location firing towards Rotation
-	UE_LOG(LogTemp, Warning, TEXT("Fire!"));
+	if (ProjectileClass && ProjectileSpawnPoint)
+	{
+		FVector ProjectileSpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
+		FRotator ProjectileSpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
+
+		AProjectileBase* TempProjectile = GetWorld()->SpawnActor<AProjectileBase>(ProjectileClass, ProjectileSpawnLocation, ProjectileSpawnRotation);
+		TempProjectile->SetOwner(this);
+	}
 }
 
 void APawnBase::HandleDestruction()
