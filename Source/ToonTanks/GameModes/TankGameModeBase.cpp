@@ -14,6 +14,7 @@ void ATankGameModeBase::ActorDied(AActor* DeadActor)
 {
 	// handle death of a turret
 	// or a player
+	UE_LOG(LogTemp, Warning, TEXT("A pawn died"));
 }
 
 void ATankGameModeBase::HandleGameStart()
