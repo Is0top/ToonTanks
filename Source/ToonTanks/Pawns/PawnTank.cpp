@@ -36,6 +36,8 @@ void APawnTank::HandleDestruction()
 	// Call base pawn class HandleDestruction to play effects
 	Super::HandleDestruction();
 	// Hide Player TODO: Create new function to hide player
+
+	Destroy();
 }
 
 // Called every frame
