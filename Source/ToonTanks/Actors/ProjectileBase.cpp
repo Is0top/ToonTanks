@@ -5,6 +5,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GamePlayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 AProjectileBase::AProjectileBase()
@@ -21,6 +22,12 @@ AProjectileBase::AProjectileBase()
 	ProjectileMovement->InitialSpeed = MovementSpeed;
 	ProjectileMovement->MaxSpeed = MovementSpeed;
 	InitialLifeSpan = 3.0f;
+
+	ParticleTrail = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle Trail"));
+	if (RootComponent && ParticleTrail)
+	{
+		ParticleTrail->SetupAttachment(RootComponent);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -38,11 +45,11 @@ void AProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 	if (OtherActor && OtherActor != this && OtherActor != MyOwner)
 	{
 		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwner->GetInstigatorController(), this, DamageType);
+		// Play a bunch of effects here 
+		UGameplayStatics::SpawnEmitterAtLocation(this, HitParticle, GetActorLocation());
+		
+		Destroy(); // I have doubts it should be here, but the course insists. Wouldn't it just leave the projectile hanging in the air if it hits its owner for some reason?
 	}
-
-	// TODO: Play a bunch of effects here 
-
-	Destroy();
 }
 
 
