@@ -52,6 +52,7 @@ void AProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 		// Play a bunch of effects here 
 		UGameplayStatics::SpawnEmitterAtLocation(this, HitParticle, GetActorLocation());
 		UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
+		GetWorld()->GetFirstPlayerController()->ClientPlayCameraShake(HitShake);
 		Destroy(); // I have doubts it should be here, but the course insists. Wouldn't it just leave the projectile hanging in the air if it hits its owner for some reason?
 	}
 }
