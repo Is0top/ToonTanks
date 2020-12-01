@@ -35,6 +35,10 @@ void AProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (LaunchSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, LaunchSound, GetActorLocation());
+	}
 }
 
 void AProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
@@ -47,7 +51,7 @@ void AProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwner->GetInstigatorController(), this, DamageType);
 		// Play a bunch of effects here 
 		UGameplayStatics::SpawnEmitterAtLocation(this, HitParticle, GetActorLocation());
-		
+		UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
 		Destroy(); // I have doubts it should be here, but the course insists. Wouldn't it just leave the projectile hanging in the air if it hits its owner for some reason?
 	}
 }
